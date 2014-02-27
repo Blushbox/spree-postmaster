@@ -9,11 +9,8 @@ A Spree extension to integrate with postmaster.io API.
 Todo
 ----
 
-* Add postmaster shipment id & url back to db (migration, etc)
-* Redirect after success create shipment
-* Add Download/print label when available
-* Configure the carrier & shipment variables based on selected shipping method (temporarily fixed to usps / 2DAY
-* Can we use length/weight/height from product(s) if available?
+* Configure the carrier & shipment variables based on selected shipping method (temporarily fixed to usps / 2DAY)
+* Is it possible to use length/weight/height from product(s) if available? (temporarily only using configured defaults from within admin panel)
 * Add Specs
 * Address verification
 * Rate calculation
@@ -29,6 +26,7 @@ Add this to your Gemfile
 Install the database migrations 
 
     rake spree_postmaster:install:migrations
+    rale db:migrate
 
 Configuration
 -------------

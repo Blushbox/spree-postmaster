@@ -5,11 +5,11 @@ Spree::Admin::OrdersController.class_eval do
   def label
     begin
     	generate_label(params[:shipment_id])
+    	flash[:notice] = "Label successfuly generated"
     rescue Exception => e
       flash[:error] = e.message
-      redirect_to :back
     end
-
+    redirect_to :back
   end
 
   private
@@ -82,8 +82,9 @@ Spree::Admin::OrdersController.class_eval do
 		# ["dimension_units","IN"]]],"additional_data":{}}
 
 		# store postmaster io id & label url
-		shipment_id = result.id
-		label_url = result.label_url
+		shipment.postmaster_id = result.id
+		shipment.postmaster_label_url = result.packages.first.label_url
+		shipment.save!
 
 		# # anytime you can extract shipment data
 		# shipment = Postmaster::Shipment.retrieve(shipment_id)

@@ -1,3 +1,5 @@
+module Spree::Postmaster
+end
 module SpreePostmaster
   class Engine < Rails::Engine
     require 'spree/core'

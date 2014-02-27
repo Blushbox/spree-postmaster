@@ -18,11 +18,9 @@ Spree::Admin::OrdersController.class_eval do
     number.gsub(/\+|\.|\-|\(|\)|\s/, '')
   end
 
-  # quick test
   def generate_label(shipment_id)
 
-		# test key...
-		Postmaster.api_key = "tt_MzkyMTAwMTpOcE05YTU2eXpNc3J2ZFZfNFZraUM1RDFqT1k"
+		Postmaster.api_key = Spree::Postmaster::Config[:api_key]
 
     shipment = Spree::Shipment.find_by_number(shipment_id)
     stock_location = shipment.stock_location
@@ -33,14 +31,14 @@ Spree::Admin::OrdersController.class_eval do
 		# when user will choose delivery type you create shipment
 		result = Postmaster::Shipment.create(
 		  :from => {
-		    :company => "BlushBox, Inc.",
-		    :contact => "Joe Smith",
-		    :line1 => "206 E. 9th, 18th Floor",
-		    :city => "Austin",
-		    :state => "TX",
-		    :zip_code => "78701-2518",
-		    :phone_no => "512-920-6404",
-		    :country => "US"
+		    :company => Spree::Postmaster::Config[:company],
+		    :contact => Spree::Postmaster::Config[:contact],
+		    :line1 => Spree::Postmaster::Config[:address],
+		    :city => Spree::Postmaster::Config[:city],
+		    :state => Spree::Postmaster::Config[:state],
+		    :zip_code => Spree::Postmaster::Config[:zip_code],
+		    :phone_no => Spree::Postmaster::Config[:phone_number],
+		    :country => Spree::Postmaster::Config[:country]
 		  },
 		  :to => {
 		  	:company => order.ship_address.company,
@@ -56,19 +54,36 @@ Spree::Admin::OrdersController.class_eval do
 		  :carrier => "usps",
 		  :service => "2DAY",
 		  :package => {
-		    :value => 55,
-		    :weight => 1.5,
-		    :length => 10,
-		    :width => 6,
-		    :height => 8,
+		    :value => order.item_total,
+		    :weight => nil || Spree::Postmaster::Config[:default_weight],
+		    :length => nil || Spree::Postmaster::Config[:default_length],
+		    :width => nil || Spree::Postmaster::Config[:default_width],
+		    :height => nil || Spree::Postmaster::Config[:default_height],
 		  },
 		  :reference => "Order ##{order.id}"
 		)
 		
-		puts result.inspect
+		# result.inspect example:
+		# <Postmaster::Shipment:0x3fd7cf8555d4 id=5649050225344512> JSON: 
+		# {"id":5649050225...,
+		# "status":"Processing",
+		# "tracking":["949990712345..."],
+		# "cost":530,
+		# "prepaid":true,
+		# "service":"2DAY",
+		# "package_count":1,
+		# "created_at":1393523684,
+		# "saturday":false,
+		# "to":[["city","Austin"],["country","US"],["phone_no","512..."],["line1","123 ..."],["state","TX"],["contact","..."],["residential",true],["zip_code","78701"]],
+		# "carrier":"usps",
+		# "from":[["city","Austin"],["country","US"],["company","BlushBox, Inc."],["phone_no","512..."],["line1","101 Test Addy"],["state","TX"],["residential",true],["zip_code","78701"]],
+		# "packages":[[["weight_units","LB"],["weight",1.0],["type","CUSTOM"],["value","174.0"],["height",4],["width",3],["length",2],
+		# ["label_url","/v1/label/AMIfv97VnI7GRonSbx-1234...."],
+		# ["dimension_units","IN"]]],"additional_data":{}}
 
-		# store in your DB shipment ID for later use
+		# store postmaster io id & label url
 		shipment_id = result.id
+		label_url = result.label_url
 
 		# # anytime you can extract shipment data
 		# shipment = Postmaster::Shipment.retrieve(shipment_id)

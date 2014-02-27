@@ -6,18 +6,34 @@ SpreePostmaster
 
 A Spree extension to integrate with postmaster.io API.
 
+Todo
+----
+
+* Add postmaster shipment id & url back to db (migration, etc)
+* Redirect after success create shipment
+* Add Download/print label when available
+* Configure the carrier & shipment variables based on selected shipping method (temporarily fixed to usps / 2DAY
+* Can we use length/weight/height from product(s) if available?
+* Add Specs
+* Address verification
+* Rate calculation
+* Notifications on delivery, etc (webhooks)
 
 Installation
--------
+------------
 
 Add this to your Gemfile
 
     gem "spree_postmaster", github: "blushbox/spree-postmaster", branch: 'master'
 
-<!-- Install the database migrations 
+Install the database migrations 
 
     rake spree_postmaster:install:migrations
- -->
+
+Configuration
+-------------
+
+Go to the admin configuration tab and click on postmaster settings link from the menu on the right, fill in API key and desired default values.
 
 Testing
 -------
@@ -28,4 +44,4 @@ Be sure to bundle your dependencies and then create a dummy test app for the spe
     $ bundle exec rake test_app
     $ bundle exec rspec spec
 
-Copyright (c) 2013 BlushBox, released under the New BSD License
+Copyright (c) 2014 BlushBox, released under the New BSD License

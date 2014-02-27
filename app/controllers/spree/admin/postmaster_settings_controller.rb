@@ -1,8 +1,8 @@
 class Spree::Admin::PostmasterSettingsController < Spree::Admin::BaseController
 
   def edit
-    @preferences_Postmaster = [:api_key, :default_weight]
-    @preferences_FromAddress = [:company]
+    @preferences_Postmaster = [:api_key, :default_weight, :default_length, :default_width, :default_height]
+    @preferences_FromAddress = [:company, :contact, :address, :city, :state, :zip_code, :phone_number, :country]
 
     @config = Spree::PostmasterConfiguration.new
   end
@@ -19,5 +19,3 @@ class Spree::Admin::PostmasterSettingsController < Spree::Admin::BaseController
   end
 
 end
-
-

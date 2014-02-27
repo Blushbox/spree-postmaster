@@ -2,5 +2,7 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  spree:
+    postmaster_settings: "Postmaster.io Settings"  
+    from_address_settings: "From address"
   postmaster:
-    

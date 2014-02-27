@@ -4,6 +4,10 @@ module SpreePostmaster
     isolate_namespace Spree
     engine_name 'spree_postmaster'
 
+    initializer "spree.postmaster.preferences", :before => :load_config_initializers do |app|
+      Spree::Postmaster::Config = Spree::PostmasterConfiguration.new
+    end
+
     config.autoload_paths += %W(#{config.root}/lib)
 
     # use rspec for tests

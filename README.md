@@ -14,10 +14,10 @@ Add this to your Gemfile
 
     gem "spree_postmaster", github: "blushbox/spree-postmaster", branch: 'master'
 
-Install the database migrations
+<!-- Install the database migrations 
 
     rake spree_postmaster:install:migrations
-
+ -->
 
 Testing
 -------

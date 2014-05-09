@@ -52,7 +52,7 @@ Spree::Admin::OrdersController.class_eval do
 		    :country => Spree::Country.find(order.ship_address.country_id).iso
 		  },
 		  :carrier => "usps",
-		  :service => shipping_method.admin_name # the internal name of each shipping method must match a valid postmaster.io service level, e.g.: 2DAY
+		  :service => shipping_method.admin_name, # the internal name of each shipping method must match a valid postmaster.io service level, e.g.: 2DAY
 		  :package => {
 		    :value => order.item_total,
 		    :weight => nil || Spree::Postmaster::Config[:default_weight],

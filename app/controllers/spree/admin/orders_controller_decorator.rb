@@ -52,7 +52,7 @@ Spree::Admin::OrdersController.class_eval do
 		    :country => Spree::Country.find(order.ship_address.country_id).iso
 		  },
 		  :carrier => "usps",
-		  :service => "2DAY",
+		  :service => shipping_method.admin_name # the internal name of each shipping method must match a valid postmaster.io service level, e.g.: 2DAY
 		  :package => {
 		    :value => order.item_total,
 		    :weight => nil || Spree::Postmaster::Config[:default_weight],
@@ -81,9 +81,10 @@ Spree::Admin::OrdersController.class_eval do
 		# ["label_url","/v1/label/AMIfv97VnI7GRonSbx-1234...."],
 		# ["dimension_units","IN"]]],"additional_data":{}}
 
-		# store postmaster io id & label url
+		# store postmaster.io id, label url, and tracking #
 		shipment.postmaster_id = result.id
 		shipment.postmaster_label_url = result.packages.first.label_url
+		shipment.tracking = result.tracking.first
 		shipment.save!
 
 		# # anytime you can extract shipment data

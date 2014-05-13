@@ -9,8 +9,6 @@ A Spree extension to integrate with postmaster.io API.
 Todo
 ----
 
-* Configure the carrier & shipment variables based on selected shipping method (temporarily fixed to usps / 2DAY)
-* Is it possible to use length/weight/height from product(s) if available? (temporarily only using configured defaults from within admin panel)
 * Add Specs
 * Address verification
 * Rate calculation
@@ -32,6 +30,10 @@ Configuration
 -------------
 
 Go to the admin configuration tab and click on postmaster settings link from the menu on the right, fill in API key and desired default values.
+
+Shipping methods internal (admin) names must match Postmaster.io service levels.
+
+Product weights and default weight are in ounces.
 
 Testing
 -------

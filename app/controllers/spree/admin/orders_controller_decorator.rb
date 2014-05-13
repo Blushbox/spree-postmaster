@@ -29,7 +29,9 @@ Spree::Admin::OrdersController.class_eval do
 		default_weight = Spree::Postmaster::Config[:default_weight]
     weight = shipment.line_items.sum do |i|
      	w = i.variant.weight
-     	w = default_weight if w.blank? or weight <= 0     		
+     	if w.blank? or w <= 0     		
+     		w = default_weight 
+     	end
      	w * i.quantity
     end
 

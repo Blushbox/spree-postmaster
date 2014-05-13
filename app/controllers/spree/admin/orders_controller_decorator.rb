@@ -27,7 +27,11 @@ Spree::Admin::OrdersController.class_eval do
     order = shipment.order
 		shipping_method = shipment.shipping_method
 		default_weight = Spree::Postmaster::Config[:default_weight]
-    weight = shipment.line_items.sum {|i| (i.variant.weight || default_weight) * i.quantity} 
+    weight = shipment.line_items.sum do |i|
+     	w = i.variant.weight
+     	w = default_weight if w.blank? or weight <= 0     		
+     	w * i.quantity
+    end
 
 		# when user will choose delivery type you create shipment
 		result = Postmaster::Shipment.create(

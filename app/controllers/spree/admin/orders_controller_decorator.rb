@@ -26,7 +26,8 @@ Spree::Admin::OrdersController.class_eval do
     stock_location = shipment.stock_location
     order = shipment.order
 		shipping_method = shipment.shipping_method
-    weight = shipment.line_items.map{|i| i.variant.weight || 1}.sum 	# default to 1oz
+		default_weight = Spree::Postmaster::Config[:default_weight]
+    weight = shipment.line_items.sum {|i| (i.variant.weight || default_weight) * i.quantity} 
 
 		# when user will choose delivery type you create shipment
 		result = Postmaster::Shipment.create(
@@ -55,7 +56,7 @@ Spree::Admin::OrdersController.class_eval do
 		  :service => shipping_method.admin_name, # the internal name of each shipping method must match a valid postmaster.io service level, e.g.: 2DAY
 		  :package => {
 		    :value => order.item_total,
-		    :weight => nil || Spree::Postmaster::Config[:default_weight],
+		    :weight => weight,
 		    :length => nil || Spree::Postmaster::Config[:default_length],
 		    :width => nil || Spree::Postmaster::Config[:default_width],
 		    :height => nil || Spree::Postmaster::Config[:default_height],

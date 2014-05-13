@@ -5,7 +5,7 @@ Spree::Admin::OrdersController.class_eval do
   def label
     begin
     	generate_label(params[:shipment_id])
-    	flash[:notice] = "Label successfuly generated"
+    	flash[:notice] = "Label successfully generated"
     rescue Exception => e
       flash[:error] = e.message
     end

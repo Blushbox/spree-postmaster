@@ -27,12 +27,14 @@ Spree::Admin::OrdersController.class_eval do
     order = shipment.order
 		shipping_method = shipment.shipping_method
 		default_weight = Spree::Postmaster::Config[:default_weight]
-    weight_in_ounces = shipment.line_items.sum do |i|
+
+		# use shipment.inventory units and not shipment.line_items so that this works w/product-assembly extension too
+    weight_in_ounces = shipment.inventory_units.sum do |i|
      	w = i.variant.weight
      	if w.blank? or w <= 0     		
      		w = default_weight 
      	end
-     	w * i.quantity
+     	w
     end
     weight_in_pounds = weight_in_ounces / 16.0
 

@@ -38,6 +38,22 @@ Spree::Admin::OrdersController.class_eval do
     end
     weight_in_pounds = weight_in_ounces / 16.0
 
+    # prepare the customs declariation form / commercial invoice if destination country different from from country
+    customs = nil
+    if Spree::Country.find(order.ship_address.country_id).iso != Spree::Postmaster::Config[:country]
+    	customs = {
+    		type: "Other",
+    		contents: [{
+					description: "Personal Items",
+					country_of_origin: Spree::Postmaster::Config[:country],
+					quantity: 1,
+					value: order.item_total,		# total after adjustments and before taxes & shipping
+					weight: weight_in_ounces * 0.9, 		# has to be lower than total package weight in ounces 
+					weight_units: 'OZ'
+    		}]
+    	}
+		end
+
 		# when user will choose delivery type you create shipment
 		result = Postmaster::Shipment.create(
 		  :from => {
@@ -69,6 +85,7 @@ Spree::Admin::OrdersController.class_eval do
 		    :length => nil || Spree::Postmaster::Config[:default_length],
 		    :width => nil || Spree::Postmaster::Config[:default_width],
 		    :height => nil || Spree::Postmaster::Config[:default_height],
+		    :customs => customs
 		  },
 		  :reference => "Order ##{order.id}"
 		)

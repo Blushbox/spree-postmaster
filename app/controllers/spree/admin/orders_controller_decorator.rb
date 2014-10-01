@@ -47,7 +47,7 @@ Spree::Admin::OrdersController.class_eval do
 					description: "Personal Items",
 					country_of_origin: Spree::Postmaster::Config[:country],
 					quantity: 1,
-					value: order.item_total,		# total after adjustments and before taxes & shipping
+					value: ((!order.item_total.blank? && order.item_total > 1) ? order.item_total : 1),		# total after adjustments and before taxes & shipping if available and greater than 1, otherwise declare $1
 					weight: weight_in_ounces * 0.9, 		# has to be lower than total package weight in ounces 
 					weight_units: 'OZ'
     		}]
